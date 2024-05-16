@@ -32,3 +32,20 @@ class DbContext:
             self.__db.commit()
         except sqlite3.Error as e:
             logging.error(f'Ошибка при вставке данных: {e}')
+    
+    def get_articles(self):
+        try:
+            self.cursor.execute('''SELECT * FROM articles''')
+            rows = self.cursor.fetchall()
+            all_data = []
+            for row in rows:
+                data = {
+                    'teacher': row[0],
+                    'authors': row[1],
+                    'article_name': row[2],
+                    #'link': row[3]
+                }
+                all_data.append(data)
+            return all_data
+        except sqlite3.Error as e:
+            logging.error(f'Ошибка при получении данных: {e}')
