@@ -1,4 +1,4 @@
-from bspuparser import BspuParser
+from bspu_parser.bspuparser import BspuParser
 import logging
 
 logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.INFO)

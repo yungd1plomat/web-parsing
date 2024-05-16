@@ -4,7 +4,7 @@ import logging
 class DbContext:
     def __init__(self):
         # Подключаемся к БД
-        self.__db = sqlite3.connect('../data/bspu.db')
+        self.__db = sqlite3.connect('data/bspu.db')
         self.cursor = self.__db.cursor()
         
         # Создаем таблицу teachers (Преподаватели)

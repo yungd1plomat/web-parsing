@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import logging
-from dbconnector import DbContext
+from dbconnector.dbconnector import DbContext
 
 class BspuParser:
 
