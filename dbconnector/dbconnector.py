@@ -11,7 +11,7 @@ class DbContext:
         self.__db.execute('CREATE TABLE IF NOT EXISTS teachers (name VARCHAR NOT NULL PRIMARY KEY UNIQUE, type VARCHAR NOT NULL);')
         
         # Создаем таблицу articles (Статьи)
-        self.__db.execute('CREATE TABLE IF NOT EXISTS articles (teacher VARCHAR REFERENCES teachers (name) NOT NULL, authors TEXT NOT NULL, article_name TEXT NOT NULL);')
+        self.__db.execute('CREATE TABLE IF NOT EXISTS articles (teacher VARCHAR REFERENCES teachers (name) NOT NULL, authors TEXT NOT NULL, article_name TEXT NOT NULL, link VARCHAR NOT NULL);')
     
     def save_college(self, teachers):
         try:
@@ -43,9 +43,26 @@ class DbContext:
                     'teacher': row[0],
                     'authors': row[1],
                     'article_name': row[2],
-                    #'link': row[3]
+                    'link': row[3]
                 }
                 all_data.append(data)
             return all_data
         except sqlite3.Error as e:
             logging.error(f'Ошибка при получении данных: {e}')
+    
+    def get_all_teachers(self):
+        # Получаем всех преподавателей из БД
+        self.cursor.execute('SELECT name FROM teachers')
+        rows = self.cursor.fetchall()
+        teachers = [row[0] for row in rows]
+        return teachers
+
+    def save_articles(self, teacher, articles):
+        for authors, name, link in articles:
+            # Проверяем существует ли уже такая запись в БД
+            self.cursor.execute('''SELECT teacher FROM articles WHERE teacher = ? AND authors = ? AND article_name = ? AND link = ?''', (teacher, authors, name, link, ))
+            exist = self.cursor.fetchone()
+            # Если записи не существует вставляем, если существует - скип
+            if not exist:
+                self.cursor.execute('''INSERT INTO articles (teacher, authors, article_name, link) VALUES (?, ?, ?, ?)''', (teacher, authors, name, link, ))
+        self.__db.commit()
