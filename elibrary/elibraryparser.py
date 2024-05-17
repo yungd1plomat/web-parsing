@@ -15,7 +15,7 @@ class ElibraryParser:
     MIN_DELAY = 1
 
     # Константа максимальная задержка
-    MAX_DELAY = 5
+    MAX_DELAY = 6
 
     # Фингерпринты TLS для подмены
     __fingerprints = ['chrome99', 'chrome100', 'chrome101', 'chrome104', 'chrome107', 'chrome110', 'chrome116', 'chrome119', 'chrome120', 'chrome123', 'chrome124']
@@ -58,11 +58,10 @@ class ElibraryParser:
             # Добавляем ко всем статьям
             all_articles += init_articles
 
+            # Случайная задержка, чтобы эмулировать поведение пользователя
+            self.__random_delay()
             # Если статей максимальное кол-во, значит есть еще страницы
             if len(init_articles) == self.ARTICLES_PER_PAGE:
-
-                # Случайная задержка, чтобы эмулировать поведение пользователя
-                self.__random_delay()
                 page = 2
                 while True:
                     # Парсим статьи на n странице
@@ -83,7 +82,7 @@ class ElibraryParser:
         except Exception as ex:
             # В случае ошибки просто отображаем ошибку
             logging.error(ex)
-        logging.info(f'Parsed {len(all_articles)} articles for {author}')
+        logging.info(f'Parsed {len(all_articles)} total articles for {author}')
         return all_articles
 
     def __random_delay(self):
@@ -132,8 +131,12 @@ class ElibraryParser:
             # Получаем авторов статьи
             authors = article_row.parent.select_one('i').text
 
+            # Получаем ссылку на статью
+            href = article_row.get('href')
+            link = "https://elibrary.ru" + href
+
             # Закидываем все в список
-            articles.append((authors, name))
+            articles.append((authors, name, link))
         # Возвращаем список статей
         return articles
 
