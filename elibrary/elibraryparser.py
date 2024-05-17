@@ -18,7 +18,7 @@ class ElibraryParser:
     MAX_DELAY = 6
 
     # Фингерпринты TLS для подмены
-    __fingerprints = ['chrome99', 'chrome100', 'chrome101', 'chrome104', 'chrome107', 'chrome110', 'chrome116', 'chrome119', 'chrome120', 'chrome123', 'chrome124']
+    __fingerprints = ['chrome99', 'chrome100', 'chrome101', 'chrome104', 'chrome107', 'chrome110']
 
     def __init__(self, api_key, cookies):
         # Решалка капчи

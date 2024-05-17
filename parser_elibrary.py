@@ -1,15 +1,10 @@
-from twocaptcha import TwoCaptcha
-from elibraryparser import ElibraryParser
-from time import sleep
+import logging
+from dbconnector.dbconnector import DbContext
 from dotenv import load_dotenv
 import os
-from bs4 import BeautifulSoup
-import urllib.parse
-import logging
-from dbconnector import DbContext
+from elibrary.elibraryparser import ElibraryParser
 
 logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.INFO)
-
 
 load_dotenv()
 
@@ -25,4 +20,3 @@ for teacher in teachers:
     database.save_articles(teacher, articles)
     remain -= 1
     logging.info(f'Remain {remain}')
-    
